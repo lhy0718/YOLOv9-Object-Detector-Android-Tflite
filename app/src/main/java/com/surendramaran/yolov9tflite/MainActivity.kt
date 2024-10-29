@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +19,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -74,14 +75,15 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
 
     private fun bindListeners() {
         binding.apply {
-            isGpu.setOnCheckedChangeListener { buttonView, isChecked ->
-                cameraExecutor.submit {
-                    detector?.restart(isGpu = isChecked)
+            delegateSelect.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    cameraExecutor.submit {
+                        detector?.restart(Delegate.valueOf(delegateSelect.selectedItem.toString()))
+                    }
                 }
-                if (isChecked) {
-                    buttonView.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.orange))
-                } else {
-                    buttonView.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.gray))
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
                 }
             }
         }

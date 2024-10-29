@@ -79,19 +79,26 @@
         android:paddingVertical="4dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ToggleButton
-            android:id="@+id/isGpu"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/orange"
-            android:textColor="@color/white"
-            android:textOff="@string/gpu"
-            android:textOn="@string/gpu"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Spinner
+                android:id="@+id/delegateSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/design_default_color_primary_dark"
+                android:entries="@array/delegate_list" />
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,4 +2,9 @@
     <string name="app_name">YoloV9 Tflite</string>
     <string name="gpu">GPU</string>
     <string name="yolov9_object_detect">YoloV9 Object Detection</string>
+    <string-array name="delegate_list">
+        <item>GPU</item>
+        <item>CPU</item>
+        <item>NNAPI</item>
+    </string-array>
 </resources>

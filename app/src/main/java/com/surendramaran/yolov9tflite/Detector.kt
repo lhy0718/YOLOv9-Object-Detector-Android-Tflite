@@ -10,6 +10,7 @@ import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.gpu.GpuDelegate
+import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.ops.CastOp
 import org.tensorflow.lite.support.common.ops.NormalizeOp
@@ -81,6 +82,37 @@ class Detector(
             numChannel = outputShape[1]
             numElements = outputShape[2]
         }
+    }
+
+    fun restart(delegate: Delegate){
+        interpreter.close()
+
+        var options = Interpreter.Options()
+
+        when(delegate){
+            Delegate.CPU -> {
+                options = options.apply { this.setNumThreads(4) }
+            }
+            Delegate.GPU -> {
+                val compatList = CompatibilityList()
+                options = options.apply {
+                    if (compatList.isDelegateSupportedOnThisDevice) {
+                        val delegateOptions = compatList.bestOptionsForThisDevice
+                        this.addDelegate(GpuDelegate(delegateOptions))
+                    } else {
+                        this.setNumThreads(4)
+                    }
+                }
+            }
+            Delegate.NNAPI -> {
+                options = options.apply {
+                    this.addDelegate(NnApiDelegate())
+                    this.setUseNNAPI(true)
+                }
+            }
+        }
+        val model = FileUtil.loadMappedFile(context, modelPath)
+        interpreter = Interpreter(model, options)
     }
 
     fun restart(isGpu: Boolean) {
