@@ -197,8 +197,9 @@ class MainActivity : AppCompatActivity(), Detector.DetectorListener {
         ).toTypedArray()
     }
 
-    override fun onEmptyDetect() {
+    override fun onEmptyDetect(inferenceTime: Long) {
         runOnUiThread {
+            binding.inferenceTime.text = "${inferenceTime}ms"
             binding.overlay.clear()
         }
     }

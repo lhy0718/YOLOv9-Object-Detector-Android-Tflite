@@ -16,10 +16,6 @@ import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
 
 class Detector(
     private val context: Context,
@@ -138,7 +134,7 @@ class Detector(
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime
 
         if (bestBoxes == null) {
-            detectorListener.onEmptyDetect()
+            detectorListener.onEmptyDetect(inferenceTime)
             return
         }
 
@@ -227,7 +223,7 @@ class Detector(
     }
 
     interface DetectorListener {
-        fun onEmptyDetect()
+        fun onEmptyDetect(inferenceTime: Long)
         fun onDetect(boundingBoxes: List<BoundingBox>, inferenceTime: Long)
     }
 
